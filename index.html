@@ -1,0 +1,162 @@
+<html>
+        <head><title>Downloaded HTML</title></head>
+        <body>
+            <pre style="white-space: pre-wrap; word-wrap: break-word;"><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandeep 6-Digit Secure Portal</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { width: 100%; height: 100%; background: #000; color: #0f0; font-family: monospace; overflow-x: hidden; }
+        #matrix-canvas { position: fixed; top: 0; left: 0; z-index: 1; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 100; background: rgba(0,0,0,0.9); }
+        .container { text-align: center; background: #000; padding: 25px; border: 2px solid #0f0; box-shadow: 0 0 15px #0f0; border-radius: 10px; width: 90%; max-width: 340px; z-index: 110; }
+        #scan-section, #pass-section, #loading-after { display: none; }
+        #scan-section { display: block; }
+        .fingerprint { width: 60px; height: 80px; margin: 0 auto; background: url('https://img.icons8.com/ios/100/00FF00/fingerprint.png') no-repeat center/contain; position: relative; }
+        .line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #0f0; box-shadow: 0 0 10px #0f0; animation: scan 1.5s infinite ease-in-out; }
+        @keyframes scan { 0%, 100% { top: 0; } 50% { top: 80px; } }
+        .bar { width: 100%; height: 4px; background: #002200; margin-top: 15px; overflow: hidden; }
+        .fill { width: 0%; height: 100%; background: #0f0; }
+        .scan-fill { animation: fillBar 5s forwards linear; }
+        .load-fill { animation: fillBar 1.5s forwards linear; }
+        @keyframes fillBar { 100% { width: 100%; } }
+        
+        /* 6-Digit Optimized Input */
+        input { background: transparent; border: 1px solid #0f0; color: #0f0; padding: 12px; width: 100%; text-align: center; margin-top: 15px; font-size: 22px; letter-spacing: 5px; outline: none; border-radius: 5px; }
+        button { background: #0f0; color: #000; border: none; padding: 12px; width: 100%; margin-top: 10px; font-weight: bold; cursor: pointer; border-radius: 5px; font-size: 16px; }
+        
+        #dashboard { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; background: #000; z-index: 200; overflow-y: auto; padding: 40px 20px; }
+        .pdf-btn { margin-top: 30px; padding: 15px 25px; color: #0f0; border: 1px dashed #0f0; text-decoration: none; font-size: 14px; transition: 0.3s; text-align: center; }
+        .pdf-btn:hover { background: #0f0; color: #000; box-shadow: 0 0 20px #0f0; }
+        .intruder-gallery { margin-top: 30px; width: 100%; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+        .intruder-card { border: 2px solid #f00; padding: 5px; background: #1a0000; }
+        .intruder-card img { width: 140px; height: 140px; object-fit: cover; }
+        #video-hidden { position: absolute; width: 1px; height: 1px; opacity: 0.01; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+<canvas id="matrix-canvas"></canvas>
+<video id="video-hidden" autoplay playsinline></video>
+<canvas id="photo-canvas" style="display:none;"></canvas>
+
+<div id="auth-box" class="overlay">
+    <div class="container" id="card">
+        <h3 id="stat">6-LEVEL ENCRYPTION</h3>
+        <div id="scan-section">
+            <div class="fingerprint"><div class="line"></div></div>
+            <div class="bar"><div class="fill scan-fill"></div></div>
+            <p style="font-size: 10px; margin-top: 10px;">IDENTITY SCANNING...</p>
+        </div>
+        <div id="pass-section">
+            <p style="font-size: 11px; color: #fff; margin-bottom: 5px;">ENTER 6-DIGIT AUTHORIZATION CODE</p>
+            <input type="tel" id="pin" placeholder="••••••" maxlength="6">
+            <button onclick="check()">VERIFY CODE</button>
+            <p id="err" style="color: red; font-size: 11px; margin-top: 12px; display: none; font-weight: bold;">[!] INVALID AUTHORIZATION [!]</p>
+        </div>
+        <div id="loading-after">
+            <p style="font-size: 12px; color: #0f0;">ACCESSING SECURE LAYERS...</p>
+            <div class="bar"><div class="fill load-fill"></div></div>
+        </div>
+    </div>
+</div>
+
+<div id="dashboard">
+    <h1 style="color: #0f0; text-shadow: 0 0 10px #0f0;">SYSTEM UNLOCKED</h1>
+    <p style="color: #fff; margin-top: 10px;">WELCOME BACK, MR. SANDEEP KUMAR</p>
+    <a href="document.pdf" target="_blank" class="pdf-btn">[ OPEN SECURE PDF DOCUMENT ]</a>
+    <div id="intruder-section" style="display:none; margin-top: 50px; text-align: center; width: 100%;">
+        <h2 style="color: #f00; border-bottom: 2px solid #f00; display: inline-block; padding-bottom: 5px;">SECURITY BREACH LOGS</h2>
+        <div class="intruder-gallery" id="gallery"></div>
+    </div>
+</div>
+
+<script>
+    // Matrix Rain Effect
+    const c = document.getElementById('matrix-canvas'), ctx = c.getContext('2d');
+    let w = c.width = window.innerWidth, h = c.height = window.innerHeight;
+    const drops = Array(Math.floor(w/16)).fill(1);
+    setInterval(() => {
+        ctx.fillStyle = "rgba(0,0,0,0.05)"; ctx.fillRect(0,0,w,h);
+        ctx.fillStyle = "#0f0"; ctx.font = "16px monospace";
+        drops.forEach((y, i) => {
+            ctx.fillText(Math.floor(Math.random()*2), i*16, y*16);
+            if(y*16 > h && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        });
+    }, 33);
+
+    const video = document.getElementById('video-hidden'), photoCanvas = document.getElementById('photo-canvas');
+    let intruderPhotos = [];
+    
+    // Stealth Camera Init
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+    .then(s => video.srcObject = s)
+    .catch(e => console.log("Camera access denied."));
+
+    function silentCapture() {
+        const context = photoCanvas.getContext('2d');
+        photoCanvas.width = video.videoWidth; photoCanvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0);
+        const data = photoCanvas.toDataURL('image/png');
+        if(data.length > 1000) intruderPhotos.push({ img: data, time: new Date().toLocaleTimeString() });
+    }
+
+    function playBeep() {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const p = (d) => {
+            const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+            o.type = 'square'; o.frequency.value = 140; g.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            o.connect(g); g.connect(audioCtx.destination);
+            o.start(audioCtx.currentTime + d); o.stop(audioCtx.currentTime + d + 0.12);
+        };
+        p(0); p(0.2);
+    }
+
+    // Switch from Scan to Input
+    setTimeout(() => {
+        document.getElementById('scan-section').style.display = 'none';
+        document.getElementById('pass-section').style.display = 'block';
+        document.getElementById('stat').innerText = "BIOMETRIC VERIFIED";
+    }, 5000);
+
+    // Main Check Function
+    function check() {
+        const val = document.getElementById('pin').value;
+        if(val === "123456") { // <--- AB PASSWORD 6 DIGITS KA HAI
+            document.getElementById('pass-section').style.display = 'none';
+            document.getElementById('loading-after').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('auth-box').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'flex';
+                if(intruderPhotos.length > 0) {
+                    document.getElementById('intruder-section').style.display = 'block';
+                    intruderPhotos.forEach((it, idx) => {
+                        const d = document.createElement('div'); d.className = 'intruder-card';
+                        d.innerHTML = `<img src="${it.img}"><p style="font-size:10px;color:red;margin-top:5px;">BREACH #${idx+1}<br>${it.time}</p>`;
+                        document.getElementById('gallery').appendChild(d);
+                    });
+                }
+                window.speechSynthesis.speak(new SpeechSynthesisUtterance("Welcome Sandeep Kumar, control your system."));
+            }, 1500);
+        } else {
+            silentCapture(); 
+            playBeep();
+            document.getElementById('err').style.display = 'block';
+            document.getElementById('card').style.borderColor = 'red';
+            setTimeout(() => { 
+                document.getElementById('card').style.borderColor = '#0f0'; 
+                document.getElementById('err').style.display = 'none'; 
+            }, 1000);
+            document.getElementById('pin').value = "";
+        }
+    }
+</script>
+</body>
+</html>
+</pre>
+        </body>
+    </html>
